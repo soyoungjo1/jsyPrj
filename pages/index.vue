@@ -59,6 +59,16 @@ const error = ref<string>('')
   let model: any = null
   let initialModelScale: number = 1 // 초기 모델 스케일 저장
   
+  // 스크롤 관련 변수
+  let scrollPosition = 0
+  const ASCII_LOGO_SCENE_CAMERA_Z_POS = 10 // 초기 카메라 Z 위치
+  const MAX_SCALE_MULTIPLIER = IS_TOUCH_DEVICE ? 10 : 30 // 최대 확대 배율
+  
+  // 최대 스크롤 거리 계산 함수
+  const getMaxScrollDistance = () => {
+    return typeof window !== 'undefined' ? window.innerHeight * 2 : 2000
+  }
+  
   //처음 THREEJS 세팅
   const initThreeJS = () => {
     // 1. Scene 생성 (3D 세계의 무대)
@@ -218,19 +228,51 @@ const error = ref<string>('')
     // 애니메이션 루프에서 처리하도록 변경 (더 부드러운 움직임)
   }
   
+  // 스크롤에 따른 확대 효과 적용
+  const updateScrollZoom = () => {
+    if (!camera || !model) return
+    
+    const scrollProgress = getScrollProgress()
+    
+    // 카메라 Z 위치 조정 (스크롤하면 카메라가 가까워져서 확대 효과)
+    // 스크롤 진행률에 따라 카메라를 앞으로 이동 (Z값 감소 = 확대)
+    const targetZ = ASCII_LOGO_SCENE_CAMERA_Z_POS - (scrollProgress * ASCII_LOGO_SCENE_CAMERA_Z_POS * 0.8)
+    camera.position.z = targetZ
+    camera.updateProjectionMatrix()
+    
+    // 컨테이너 스케일 조정 (추가 확대 효과)
+    if (asciiContainer.value) {
+      const scale = 1 + (scrollProgress * (MAX_SCALE_MULTIPLIER - 1))
+      asciiContainer.value.style.transform = `scale(${Math.pow(scale, 1.5)})`
+      
+      // 불투명도 조정 (70% 이후부터 페이드아웃)
+      const opacityStart = 0.7
+      if (scrollProgress >= opacityStart) {
+        const opacity = 1 - ((scrollProgress - opacityStart) / (1 - opacityStart))
+        asciiContainer.value.style.opacity = clamp(opacity, 0, 1).toString()
+      } else {
+        asciiContainer.value.style.opacity = '1'
+      }
+    }
+  }
+  
   // ASCII 로고 회전 업데이트
   const updateAsciiLogoRotation = () => {
     const { x: initX, y: initY, z: initZ } = ASCII_LOGO_INIT.rotation
   
     if (!model) return
+    
+    const scrollProgress = getScrollProgress()
+    // 스크롤 진행률에 따라 회전 강도 감소 (확대되면서 회전이 줄어듦)
+    const rotationDampen = 1 - scrollProgress * 0.8 // 스크롤하면 회전이 80%까지 감소
   
     // 터치 디바이스에서 자동 회전
     if (IS_TOUCH_DEVICE) {
       const timer = Date.now() - START_TIME
       model.rotation.set(
-        initX + Math.sin(timer * ASCII_AUTO_ROTATION_SPEED) * ASCII_AUTO_ROTATION_MAX_DIST,
+        initX + Math.sin(timer * ASCII_AUTO_ROTATION_SPEED) * ASCII_AUTO_ROTATION_MAX_DIST * rotationDampen,
         initY,
-        initZ + Math.cos(timer * ASCII_AUTO_ROTATION_SPEED) * ASCII_AUTO_ROTATION_MAX_DIST
+        initZ + Math.cos(timer * ASCII_AUTO_ROTATION_SPEED) * ASCII_AUTO_ROTATION_MAX_DIST * rotationDampen
       )
       return
     }
@@ -242,11 +284,11 @@ const error = ref<string>('')
     const normalizedX = (mousePosition.x / vw) * 2 - 1
     const normalizedY = (mousePosition.y / vh) * 2 - 1
     
-    // 적당한 회전 범위 적용 (자연스러운 움직임)
+    // 적당한 회전 범위 적용 (자연스러운 움직임) + 스크롤에 따른 감소
     model.rotation.set(
-      initX + normalizedY * Math.PI * 1.2 * ASCII_LOGO_ROTATION_SCALAR,  // Y마우스 → X회전 (적당한 범위)
-      initY + normalizedX * Math.PI * 0.8 * ASCII_LOGO_ROTATION_SCALAR,  // X마우스 → Y회전 (부드러운 Y축 회전)
-      initZ + normalizedX * Math.PI * 0.3 * ASCII_LOGO_ROTATION_SCALAR   // X마우스 → Z회전 (약간의 Z축 회전)
+      initX + normalizedY * Math.PI * 1.2 * ASCII_LOGO_ROTATION_SCALAR * rotationDampen,  // Y마우스 → X회전 (적당한 범위)
+      initY + normalizedX * Math.PI * 0.8 * ASCII_LOGO_ROTATION_SCALAR * rotationDampen,  // X마우스 → Y회전 (부드러운 Y축 회전)
+      initZ + normalizedX * Math.PI * 0.3 * ASCII_LOGO_ROTATION_SCALAR * rotationDampen   // X마우스 → Z회전 (약간의 Z축 회전)
     )
   }
   
@@ -256,7 +298,20 @@ const error = ref<string>('')
     width: typeof window !== 'undefined' ? window.innerWidth : 1920
   })
   
+  // 스크롤 진행률 계산 (0 ~ 1)
+  const getScrollProgress = () => {
+    return Math.min(scrollPosition / getMaxScrollDistance(), 1)
+  }
+  
+  // 값 범위 제한
+  const clamp = (value: number, min: number, max: number) => {
+    return Math.max(min, Math.min(value, max))
+  }
+  
   const render = () => {
+    // 스크롤에 따른 확대 효과 업데이트
+    updateScrollZoom()
+    
     // ASCII 로고 회전 업데이트 (마우스가 움직였을 때만)
     if (mousePosition.hasMoved || IS_TOUCH_DEVICE) {
       updateAsciiLogoRotation()
@@ -279,6 +334,11 @@ const error = ref<string>('')
   
   const handleResize = () => {
     console.log('리사이징::::::::::::::::::::::::::::');
+    
+    // 스크롤 가능하도록 body 높이 업데이트
+    const maxScrollDistance = getMaxScrollDistance()
+    document.body.style.minHeight = `${maxScrollDistance}px`
+    document.documentElement.style.minHeight = `${maxScrollDistance}px`
     
     if (!camera || !renderer || !asciiEffect) return
     
@@ -328,6 +388,11 @@ const error = ref<string>('')
     }, 100)
   }
   
+  // 스크롤 이벤트 핸들러
+  const handleScroll = () => {
+    scrollPosition = window.scrollY || window.pageYOffset || 0
+  }
+  
   // 전체 초기화 함수
   const initGlbLoading = () => {
     // Three.js 초기화
@@ -344,6 +409,11 @@ const error = ref<string>('')
   
   // Vue 컴포넌트 생명주기에서 호출 - copypage.vue 방식
   onMounted(async () => {
+    // 스크롤 가능하도록 body에 충분한 높이 추가
+    const maxScrollDistance = getMaxScrollDistance()
+    document.body.style.minHeight = `${maxScrollDistance}px`
+    document.documentElement.style.minHeight = `${maxScrollDistance}px`
+    
     // 터치 디바이스가 아닌 경우에만 마우스 이벤트 등록
     if (!IS_TOUCH_DEVICE) {
       document.addEventListener('mousemove', handleMouseMove)
@@ -355,6 +425,10 @@ const error = ref<string>('')
     // 리사이즈 및 방향 변경 이벤트 리스너
     window.addEventListener('resize', handleResize)
     window.addEventListener('orientationchange', handleOrientationChange)
+    
+    // 스크롤 이벤트 리스너 추가
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll() // 초기 스크롤 위치 설정
     
     // 터치 이벤트 추가 (모바일 최적화)
     if (IS_TOUCH_DEVICE) {
@@ -400,6 +474,11 @@ const error = ref<string>('')
     }
     window.removeEventListener('resize', handleResize)
     window.removeEventListener('orientationchange', handleOrientationChange)
+    window.removeEventListener('scroll', handleScroll)
+    
+    // body 높이 원래대로 복원 (선택사항)
+    document.body.style.minHeight = ''
+    document.documentElement.style.minHeight = ''
     
     // Three.js 리소스 정리
     if (renderer) {
@@ -417,7 +496,7 @@ const error = ref<string>('')
     width: 100vw;
     height: 100vh;
     background: #fafafa;
-    position: fixed !important;
+    position: sticky !important;
     top: 0 !important;
     left: 0 !important;
     overflow: hidden !important;
@@ -430,7 +509,7 @@ const error = ref<string>('')
     width: 100% !important;
     height: 100% !important;
     display: flex !important;
-    align-items: center !important;
+    align-items: flex-start !important;
     justify-content: center !important;
     user-select: none !important;
     transform-style: preserve-3d;
@@ -438,6 +517,8 @@ const error = ref<string>('')
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
+    transition: opacity 0.1s ease-out;
+    transform-origin: center center;
   }
   
   .loading, .error {
