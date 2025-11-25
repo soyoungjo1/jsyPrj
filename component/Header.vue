@@ -8,7 +8,7 @@
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .header_wrap {
   background:#f9f9f9;
   width:100%;
