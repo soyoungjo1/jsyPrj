@@ -9,9 +9,7 @@ export default defineNuxtConfig({
   },
   css: ['@/assets/css/common.css'],
   devtools: { enabled: true },
-  modules: [
-      '@pinia/nuxt'
-  ],
+  modules: ['@pinia/nuxt', '@nuxt/image'],
   app: {
     head: {
       title: 'gg',

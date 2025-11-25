@@ -3,7 +3,7 @@
       <div class="confirm_box">
         <div class="confirm_cont_wrap">
             <button type="button" v-if="rootStore.confirmIsShowClose" class="close" @click="close()">
-                <img src="@/assets/images/close.png" alt="닫기">
+                <NuxtImg src="/images/close.png" alt="닫기"/>
             </button>
             <div class="confirm_cont">
                 <h3 v-if="rootStore.confirmTitle">{{ rootStore.confirmTitle }}</h3>
