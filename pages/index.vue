@@ -51,12 +51,13 @@ const error = ref<string>('')
   const ASCII_AUTO_ROTATION_SPEED = 0.0005
   const ASCII_AUTO_ROTATION_MAX_DIST = 0.4
   const ASCII_LOGO_INIT = {
-    rotation: { x: Math.PI / 11, y: 0, z: 0 }
+    rotation: { x: Math.PI / 11, y: Math.PI, z: 0 } // Y축 180도 회전으로 S 뒤집기
   }
   const START_TIME = Date.now()
   const IS_TOUCH_DEVICE = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
   
   let model: any = null
+  let initialModelScale: number = 1 // 초기 모델 스케일 저장
   
   //처음 THREEJS 세팅
   const initThreeJS = () => {
@@ -197,6 +198,9 @@ const error = ref<string>('')
      //가장 큰 축을 기준으로 스케일 계산
      const maxAxis = Math.max(size.x, size.y, size.z)
      const scale = 8 / maxAxis // copypage.vue와 비슷한 크기로 조정 
+     
+      // 초기 스케일 저장
+      initialModelScale = scale
       
       // 모델 크기 조절
       model.scale.setScalar(scale);
@@ -273,8 +277,9 @@ const error = ref<string>('')
     render()
   }
   
-  // copypage.vue 방식의 향상된 리사이즈 핸들러
   const handleResize = () => {
+    console.log('리사이징::::::::::::::::::::::::::::');
+    
     if (!camera || !renderer || !asciiEffect) return
     
     const windowSize = getWindowSize()
@@ -298,18 +303,19 @@ const error = ref<string>('')
     
     asciiEffect.setSize(windowSize.width, windowSize.height)
     
-    // 모바일에서 로고 스케일 조정
-    if (model) {
-      let scale = 10
+    // 모바일에서 로고 스케일 조정 (초기 스케일 기준으로 상대 조정)
+    if (model && initialModelScale > 0) {
+      let scaleMultiplier = 1.0 // 기본 배율
       if (windowSize.width < 480) {
-        scale = 6
+        scaleMultiplier = 0.6 // 60% 크기
       } else if (windowSize.width < 768) {
-        scale = 8
+        scaleMultiplier = 0.8 // 80% 크기
       } else if (windowSize.width < 1200) {
-        scale = 9
+        scaleMultiplier = 0.9 // 90% 크기
       }
-      
-      model.scale.set(scale, scale, scale)
+      // 초기 스케일에 배율을 곱해서 적용
+      const finalScale = initialModelScale * scaleMultiplier
+      model.scale.setScalar(finalScale)
     }
   }
   
@@ -465,73 +471,6 @@ const error = ref<string>('')
     letter-spacing: -0.6px !important;
     margin: 0 !important;
     padding: 0 !important;
-  }
-  
-  @media (max-width: 1200px) {
-    .ascii-container :deep(div) {
-      font-size: 6px;
-      line-height: 6px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .ascii-container :deep(div) {
-      font-size: 4px;
-      line-height: 4px;
-    }
-    
-    .ascii-container {
-      padding: 0.5rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .ascii-container :deep(div) {
-      font-size: 3px;
-      line-height: 3px;
-    }
-  }
-  
-  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .ascii-container {
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: crisp-edges;
-    }
-  }
-  
-  @media (prefers-color-scheme: dark) {
-    .ascii-test-page {
-      background-color: #050505;
-      color: #fafafa;
-    }
-    
-    .ascii-container :deep(div) {
-      color: #fafafa;
-      background: #050505;
-    }
-  }
-  
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-    
-    .ascii-container {
-      transition: none !important;
-    }
-  }
-  
-  @media (hover: none) and (pointer: coarse) {
-    .ascii-container {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
   }
   
   ::-webkit-scrollbar {
