@@ -1,11 +1,20 @@
 <template>
     <div class="ascii-test-page">
+        <!-- 상단 타이틀 -->
+        <h1 class="title top-left">your name</h1>
+        
         <!-- ASCII 로고 컨테이너 -->
         <div 
             ref="asciiContainer" 
             class="ascii-container"
         >
             <!-- AsciiEffect가 여기에 DOM 요소를 추가함 -->
+        </div>
+        
+        <!-- 하단 설명 -->
+        <div class="description">
+            <p>your title at company name</p>
+            <p>based in location</p>
         </div>
         
         <!-- 로딩 상태 -->
@@ -509,7 +518,7 @@ const error = ref<string>('')
     width: 100% !important;
     height: 100% !important;
     display: flex !important;
-    align-items: flex-start !important;
+    align-items: center !important;
     justify-content: center !important;
     user-select: none !important;
     transform-style: preserve-3d;
@@ -519,6 +528,38 @@ const error = ref<string>('')
     overflow: hidden !important;
     transition: opacity 0.1s ease-out;
     transform-origin: center center;
+  }
+  
+  .title {
+    position: absolute;
+    font-family: "Source Code Pro", monospace;
+    font-size: clamp(24px, 4vw, 48px);
+    font-weight: 400;
+    color: #050505;
+    margin: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  .title.top-left {
+    top: 5%;
+    left: 5%;
+  }
+  
+  .description {
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    font-family: "Source Code Pro", monospace;
+    font-size: clamp(12px, 1.5vw, 16px);
+    color: #050505;
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  .description p {
+    margin: 0.5em 0;
+    line-height: 1.6;
   }
   
   .loading, .error {
