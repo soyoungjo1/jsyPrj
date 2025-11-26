@@ -1,8 +1,10 @@
 <!-- app.vue -->
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <NuxtErrorBoundary @error="handleError">
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </NuxtErrorBoundary>
   <Toast /> 
   <Confirm />
   <MessageDialog/>
@@ -13,5 +15,9 @@
 import Toast from '@/component/Toast.vue'
 import Confirm from './component/Confirm.vue';
 import MessageDialog from './component/MessageDialog.vue';
+
+const handleError = (error: any) => {
+  errorLog('NuxtErrorBoundary', error);
+};
 
 </script>

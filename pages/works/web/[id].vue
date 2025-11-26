@@ -3,5 +3,5 @@
 </template>
   
 <script setup lang="ts">
-import webDetail from "@/views/webDetail.vue";
+import webDetail from '~/views/webDetail.vue';
 </script>

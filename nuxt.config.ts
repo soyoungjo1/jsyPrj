@@ -3,8 +3,10 @@ export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
     jwtSecret: process.env.JWT_SECRET || 'default-secret',
+    notionDocsDataId: process.env.NOTION_DOCS_DATAID,
     public: {
-      apiBase: process.env.API_BASE
+      apiBase: process.env.API_BASE,
+      notionDocsDataId: process.env.NOTION_DOCS_DATAID
     }
   },
   css: ['@/assets/css/common.css'],
