@@ -8,7 +8,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRootStore } from '@/stores/useRootStore';
+import { sendGet } from '~/utils/api'
 
+const rootStore = useRootStore();
 const notionList = ref<any[]>([]);
 
 // 강제 에러 발생 함수
@@ -19,18 +22,14 @@ const triggerError = () => {
 const getNotionList = async () => {
   try {
     const databaseId = 'b25d7dd6abea4a7393adb43e74fd5848'
-    const response = await fetch(`/api/notionList?databaseId=${databaseId}`)
-    
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ message: response.statusText }))
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
-    }
-    const res = await response.json();
+    const res = await sendGet('api/notionList', { databaseId })
     notionList.value = res?.results || []
+    console.log('notionList::::::::::::::', notionList.value);
   } catch (error) {
-    errorLog('API 호출 에러', error)
+    rootStore.toast('리스트를 불러오지 못했습니다.')
   }
 }
+
 
 onMounted(async () => {
   await getNotionList();

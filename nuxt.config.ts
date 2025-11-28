@@ -4,6 +4,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     jwtSecret: process.env.JWT_SECRET || 'default-secret',
     notionDocsDataId: process.env.NOTION_DOCS_DATAID,
+    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+    TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
     public: {
       apiBase: process.env.API_BASE,
       notionDocsDataId: process.env.NOTION_DOCS_DATAID

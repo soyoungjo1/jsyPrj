@@ -17,7 +17,19 @@ import Confirm from './component/Confirm.vue';
 import MessageDialog from './component/MessageDialog.vue';
 
 const handleError = (error: any) => {
-  errorLog('NuxtErrorBoundary', error);
+  errorLog('client', error);
 };
+
+onMounted(()=>{
+  // window.onerror (동기에러)
+  window.onerror = (error) => {
+    errorLog('client', error)
+  }
+  
+  // unhandledrejection (비동기에러)
+  window.addEventListener('unhandledrejection', (event) => {
+    errorLog('client', event.reason)
+  })
+})
 
 </script>
