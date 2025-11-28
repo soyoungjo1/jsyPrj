@@ -65,7 +65,7 @@ const callTelegram = async ( data: any ) => {
       body: data
     })
     if (response && response.RESULT_CODE === '0') {
-      console.log('성공함 ㅎㅎ');
+      console.log('텔레그램 호출 성공:');
     }
   }catch(error: any){
     console.error('텔레그램 호출 실패:', error);
