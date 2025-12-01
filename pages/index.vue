@@ -1,7 +1,7 @@
 <template>
     <div class="ascii-test-page">
         <!-- 상단 타이틀 -->
-        <h1 class="title top-left">your name22222</h1>
+        <h1 class="title top-left">your name</h1>
         
         <!-- ASCII 로고 컨테이너 -->
         <div 
