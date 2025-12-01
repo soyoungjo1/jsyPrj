@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/h"
+
+cd "$(dirname "$0")/../.." || exit
+node .husky/commit-msg-handler.js "$1"
