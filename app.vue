@@ -4,6 +4,11 @@
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+    <template #error="{ error }">
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </template>
   </NuxtErrorBoundary>
   <Toast /> 
   <Confirm />
@@ -15,6 +20,7 @@
 import Toast from '@/component/Toast.vue'
 import Confirm from './component/Confirm.vue';
 import MessageDialog from './component/MessageDialog.vue';
+import { errorLog } from '~/utils/common';
 
 const handleError = (error: any) => {
   errorLog('client', error);
