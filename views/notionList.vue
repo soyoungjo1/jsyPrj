@@ -1,7 +1,9 @@
 <template>
   <div>
-    <p>ddddddddddd</p>
+    <p v-if="isPending">로딩중</p>
+    <p v-if="isFetching">렌더링중</p>
     <button @click="triggerError">에러 발생 테스트</button>
+    <button @click="listRefetch()">재갱신</button>
     <div class="notion_list_wrap">
       <ul>
         <li v-for="(item, index) in notionList" :key="item.id || index" class="notion_item">
@@ -28,14 +30,12 @@
 
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed, watch } from 'vue'
 import { useRootStore } from '@/stores/useRootStore';
 import { sendGet } from '~/utils/api'
 
 const rootStore = useRootStore();
 const config = useRuntimeConfig();
-const notionList = ref<any[]>([]);
-
 // 강제 에러 발생 함수
 const triggerError = () => {
   throw new Error('테스트 에러입니다!');
@@ -57,25 +57,47 @@ const formatDate = (dateString: string) => {
   })
 }
 
-const getNotionList = async () => {
-  try {
-    const databaseId = config.public.notionDocsDataId
+//기존 api 호출 함수
+// const getNotionList = async () => {
+//   try {
+//     const databaseId = config.public.notionDocsDataId
+//     const res = await sendGet('api/notionList', { databaseId })
+//     notionList.value = res?.results || []
+//     console.log('notionList::::::::::::::', notionList.value);
+//   } catch (error) {
+//     rootStore.toast('리스트를 불러오지 못했습니다.')
+//   }
+// }
+
+//tanstackQuery 사용
+const { data:notionListData, isPending, isFetching, refetch, isError, error } = useQuery({
+  queryKey : ['notionList', config.public.notionDocsDataId ],
+  queryFn: async () => {
+    const databaseId = config.public.notionDocsDataId;
     const res = await sendGet('api/notionList', { databaseId })
-    notionList.value = res?.results || []
-    console.log('notionList::::::::::::::', notionList.value);
-  } catch (error) {
+    const results = res?.results || []
+    console.log('notionList::::::::::::::', results);
+    return results
+  },
+  enabled: !!config.public.notionDocsDataId, // config.public.notionDocsDataId가 있으면 실행, 없으면 실행 안 함
+})
+
+// UI 알림만 (로깅은 이미 됨)
+watch(error, (err) => {
+  if (err) {
     rootStore.toast('리스트를 불러오지 못했습니다.')
   }
+})
+
+const notionList = computed(() => notionListData.value || []);
+
+const listRefetch = () => {
+  refetch();
 }
 
 const goDetail = (pageId: string) => {
   navigateTo(`/docs/detail/${pageId}`)
 }
-
-
-onMounted(async () => {
-  await getNotionList();
-})
 
 </script>
 
