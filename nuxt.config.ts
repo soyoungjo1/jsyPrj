@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   },
   css: ['@/assets/css/common.css'],
   devtools: { enabled: true },
-  modules: ['@pinia/nuxt', '@nuxt/image', '@peterbud/nuxt-query', 'nuxt-aos'],
+  modules: ['@pinia/nuxt', '@nuxt/image', '@peterbud/nuxt-query', 'nuxt-aos', '@nuxtjs/google-fonts'],
   // @ts-ignore - @peterbud/nuxt-query 모듈 타입 확장
   nuxtQuery: {
     /**
@@ -54,6 +54,17 @@ export default defineNuxtConfig({
     once: false,         // 한 번만 애니메이션 (스크롤 다운 시)
     delay: 0,          // 지연 시간
   },
+  // Google Fonts 설정
+  googleFonts: {
+    families: {
+      'Noto Sans KR': {
+        wght: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      }
+    },
+    display: 'swap',    // 폰트 로딩 최적화
+    preload: true,      // 폰트 프리로드
+    preconnect: true,    // DNS 프리커넥트
+  },
   app: {
     head: {
       title: 'gg',
@@ -68,10 +79,7 @@ export default defineNuxtConfig({
         { name: 'author', content: 'gg' },
       ],
       link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap'
-        },
+        // Google Fonts는 @nuxtjs/google-fonts 모듈이 자동으로 처리
       ]
     }
   },
