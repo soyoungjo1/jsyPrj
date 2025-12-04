@@ -1,6 +1,7 @@
 //에러 관리
 import type { ErrorMessage } from '~/server/api/telegram/sendTelegram';
 
+
 /**
  * 에러 스택에서 컴포넌트 경로 추출
  */
@@ -70,4 +71,67 @@ const callTelegram = async ( data: any ) => {
   }catch(error: any){
     console.error('텔레그램 호출 실패:', error);
   }
+}
+
+
+/**
+ * 디바운싱: 연속된 호출 중 마지막 호출만 실행
+ * @param fn 실행할 함수
+ * @param delay 지연 시간 (ms, 기본값: 300)
+ * @returns 디바운싱된 함수
+ * 
+ * 사용 예시:
+ * const debouncedSearch = debounce((value) => {
+ *   console.log('검색:', value)
+ * }, 300)
+ * 
+ * input.addEventListener('input', (e) => {
+ *   debouncedSearch(e.target.value)
+ * })
+ */
+
+export const debounce = (
+  fn: (...args: any[]) => any,
+  delay: number = 300
+) => {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  return (...args: any[]) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+}
+
+/**
+ * 쓰로틀링: 일정 시간 간격으로만 실행
+ * @param fn 실행할 함수
+ * @param limit 실행 간격 (ms, 기본값: 300)
+ * @returns 쓰로틀링된 함수
+ * 
+ * 사용 예시:
+ * const throttledScroll = throttle(() => {
+ *   console.log('스크롤 이벤트')
+ * }, 100)
+ * 
+ * window.addEventListener('scroll', throttledScroll)
+ */
+export const throttle = (
+  fn: (...args: any[]) => any,
+  limit: number = 300
+) => {
+  let inThrottle: boolean = false;
+
+  return (...args: any[]) => {
+    if (!inThrottle) {
+      fn(...args);
+      inThrottle = true;
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
+    }
+  };
 }
