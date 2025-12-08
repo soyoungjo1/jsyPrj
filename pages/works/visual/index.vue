@@ -1,8 +1,9 @@
 <template>
-    <p>ddddddddddddddddddddddddd나야</p>
+    <div>
+        <p>비주얼</p>
+    </div>
 </template>
 
 <script setup lang="ts">
-
 
 </script>
