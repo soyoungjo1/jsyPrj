@@ -32,5 +32,13 @@ const goLinkVisual = () => {
 - 그래픽은 어떻게 보여줄지 생각해봐야함
  */ 
 
+
+ /**
+  * web 
+  * 헬스케어 > hecto.json[커머스 운영]
+  * 아이스크림 > iscream.json [커머스 운영]
+  * 올하우 > allhow.json [에이전시]
+  */
+
 </script>
 
