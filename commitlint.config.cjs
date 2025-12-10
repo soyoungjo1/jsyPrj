@@ -23,6 +23,7 @@ module.exports = {
         'refactor',
         'revert',
         'style',
+        'add',
       ],
     ],
     'subject-empty': [0],
