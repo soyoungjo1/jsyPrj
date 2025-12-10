@@ -2,10 +2,52 @@
     <div>
         <button @click="goLinkWeb()">test1</button>
         <button @click="goLinkVisual()">test2</button>
+        <div class="ascii-wrap">
+          <pre id="pre1"></pre>
+          <!-- Insert the image want to convert -->
+          <img id="img1" src="/assets/images/TESTTEST.png" crossorigin="anonymous" />
+        </div>
+        <div class="ascii-wrap">
+          <pre id="pre2"></pre>
+          <!-- Insert the second image want to convert -->
+          <img id="img2" src="/assets/images/TESTTESTTEST.png" crossorigin="anonymous" />
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
+const { convertImageToAscii } = useAsciiArt();
+
+onMounted(() => {
+  if (import.meta.client) {
+    // 첫 번째 이미지
+    const img1 = document.getElementById('img1') as HTMLImageElement;
+    if (img1) {
+      const convertImage1 = () => {
+        convertImageToAscii('img1', 'pre1', undefined, undefined, 150, 150);
+      };
+      
+      img1.onload = convertImage1;
+      if (img1.complete) {
+        convertImage1();
+      }
+    }
+    
+    // 두 번째 이미지
+    const img2 = document.getElementById('img2') as HTMLImageElement;
+    if (img2) {
+      const convertImage2 = () => {
+        convertImageToAscii('img2', 'pre2', undefined, undefined, 150, 150);
+      };
+      
+      img2.onload = convertImage2;
+      if (img2.complete) {
+        convertImage2();
+      }
+    }
+  }
+});
 
 const goLinkWeb = () => {
     navigateTo('/web/123')
@@ -41,4 +83,5 @@ const goLinkVisual = () => {
   */
 
 </script>
+
 
