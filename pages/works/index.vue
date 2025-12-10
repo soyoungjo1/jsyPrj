@@ -2,22 +2,32 @@
     <div>
         <button @click="goLinkWeb()">test1</button>
         <button @click="goLinkVisual()">test2</button>
-        <div class="ascii-wrap">
-          <pre id="pre1"></pre>
-          <!-- Insert the image want to convert -->
-          <img id="img1" src="/assets/images/TESTTEST.png" crossorigin="anonymous" />
+        <div class="ascii-wrap scroll">
+          <div ref="asciiWrapper1">
+            <pre id="pre1"></pre>
+            <!-- Insert the image want to convert -->
+            <img id="img1" src="/assets/images/TESTTEST.png" crossorigin="anonymous" />
+          </div>
         </div>
-        <div class="ascii-wrap">
-          <pre id="pre2"></pre>
-          <!-- Insert the second image want to convert -->
-          <img id="img2" src="/assets/images/TESTTESTTEST.png" crossorigin="anonymous" />
-        </div>
-    </div>
+        <div class="ascii-wrap scroll">
+          <div ref="asciiWrapper2">
+            <pre id="pre2"></pre>
+            <!-- Insert the second image want to convert -->
+            <img id="img2" src="/assets/images/TESTTESTTEST.png" crossorigin="anonymous" />
+          </div>
+      </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, nextTick } from 'vue';
 const { convertImageToAscii } = useAsciiArt();
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
+
+const asciiWrapper1 = ref(null)
+const asciiWrapper2 = ref(null)
 
 onMounted(() => {
   if (import.meta.client) {
@@ -26,6 +36,10 @@ onMounted(() => {
     if (img1) {
       const convertImage1 = () => {
         convertImageToAscii('img1', 'pre1', undefined, undefined, 150, 150);
+        // 아스키 변환 후 스크롤 애니메이션 초기화
+        nextTick(() => {
+          asciiScrollImg(asciiWrapper1.value, 'pre1', 'img1');
+        });
       };
       
       img1.onload = convertImage1;
@@ -38,7 +52,9 @@ onMounted(() => {
     const img2 = document.getElementById('img2') as HTMLImageElement;
     if (img2) {
       const convertImage2 = () => {
-        convertImageToAscii('img2', 'pre2', undefined, undefined, 150, 150);
+        nextTick(() => {
+          asciiScrollImg(asciiWrapper2.value, 'pre2', 'img2');
+        });
       };
       
       img2.onload = convertImage2;
@@ -56,7 +72,6 @@ const goLinkWeb = () => {
 const goLinkVisual = () => {
     navigateTo('/visual/123')
 }
-
 
 /**
  * 
@@ -84,4 +99,10 @@ const goLinkVisual = () => {
 
 </script>
 
+<style scope>
+.ascii-wrap.scroll{
+  padding:3000px 0;
+}
+
+</style>
 

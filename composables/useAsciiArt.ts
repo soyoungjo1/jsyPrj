@@ -118,3 +118,53 @@ export const useAsciiArt = () => {
   };
 };
 
+
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
+/**
+ * 아스키 아트 > 이미지 변환 스크롤
+ */
+export const asciiScrollImg = (wrapper: HTMLElement | null, preId: string, imgId: string) => {
+  if (!wrapper) return;
+  
+  const pre = document.getElementById(preId);
+  const img = document.getElementById(imgId);
+  
+  if (!pre || !img) return;
+  
+  // 아스키 아트 → 이미지 전환 애니메이션
+  // 스크롤 진행도에 따라 그라데이션처럼 부드럽게 전환
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: wrapper,
+      start: "top bottom",   // 요소가 뷰포트 하단에 나타날 때 시작
+      end: "bottom top",      // 요소가 뷰포트 상단을 벗어날 때 종료
+      scrub: 1,               // 부드러운 스크롤 연동 (값이 클수록 더 부드러움)
+      markers: false,         // 디버깅용 마커 (필요시 true)
+    }
+  })
+  // 아스키 아트 페이드아웃 (점진적으로 사라짐)
+  .to(pre, {
+    opacity: 0,
+    filter: "blur(2px)",      // 사라질 때 약간의 블러 효과
+    duration: 1,
+    ease: "power2.inOut",     // 부드러운 이징
+  }, 0)
+  // 이미지 페이드인 (점진적으로 나타남)
+  .fromTo(img, 
+    {
+      opacity: 0,
+      filter: "blur(5px)",    // 시작 시 블러 효과
+      scale: 0.98,            // 약간 작게 시작
+    },
+    {
+      opacity: 1,
+      filter: "blur(0px)",     // 선명하게 전환
+      scale: 1,                // 원래 크기로
+      duration: 1,
+      ease: "power2.inOut",    // 부드러운 이징
+    }, 
+    0.2  // 약간 늦게 시작하여 겹치는 효과
+  )
+}

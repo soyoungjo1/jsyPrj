@@ -42,7 +42,39 @@ img{max-width:100%; width:auto; margin:0 auto; vertical-align:middle; }
   overflow: auto;
 }
 
-.ascii-wrap #img {
-  display: none; /* 아스키 아트만 보이도록 */
+.ascii-wrap img {
+  display: none; 
+}
+
+/* ascii-wrap.scroll 전환 효과 */
+.ascii-wrap.scroll {
+  position: relative;
+}
+
+.ascii-wrap.scroll > div {
+  position: relative;
+  display: inline-block;
+}
+
+.ascii-wrap.scroll pre {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  display: block;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ascii-wrap.scroll img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  display: block;
+  transition: opacity 0.3s ease;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  box-sizing: border-box;
 }
   
