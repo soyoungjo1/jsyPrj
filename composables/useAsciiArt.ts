@@ -138,9 +138,9 @@ export const asciiScrollImg = (wrapper: HTMLElement | null, preId: string, imgId
   gsap.timeline({
     scrollTrigger: {
       trigger: wrapper,
-      start: "top bottom",   // 요소가 뷰포트 하단에 나타날 때 시작
+      start: "top 30%",   // 요소가 뷰포트 하단에 나타날 때 시작
       end: "bottom top",      // 요소가 뷰포트 상단을 벗어날 때 종료
-      scrub: 1,               // 부드러운 스크롤 연동 (값이 클수록 더 부드러움)
+      scrub: 0.05,             // 스크롤 반응 속도 (값이 작을수록 빠름)
       markers: false,         // 디버깅용 마커 (필요시 true)
     }
   })
@@ -148,8 +148,8 @@ export const asciiScrollImg = (wrapper: HTMLElement | null, preId: string, imgId
   .to(pre, {
     opacity: 0,
     filter: "blur(2px)",      // 사라질 때 약간의 블러 효과
-    duration: 1,
-    ease: "power2.inOut",     // 부드러운 이징
+    duration: 0.2,
+    ease: "power1.inOut",     // 더 빠른 이징
   }, 0)
   // 이미지 페이드인 (점진적으로 나타남)
   .fromTo(img, 
@@ -162,9 +162,9 @@ export const asciiScrollImg = (wrapper: HTMLElement | null, preId: string, imgId
       opacity: 1,
       filter: "blur(0px)",     // 선명하게 전환
       scale: 1,                // 원래 크기로
-      duration: 1,
-      ease: "power2.inOut",    // 부드러운 이징
+      duration: 0.5,
+      ease: "power1.inOut",    // 더 빠른 이징
     }, 
-    0.2  // 약간 늦게 시작하여 겹치는 효과
+    0.1  // 더 빠른 시작으로 겹치는 효과
   )
 }

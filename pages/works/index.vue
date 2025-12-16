@@ -52,6 +52,8 @@ onMounted(() => {
     const img2 = document.getElementById('img2') as HTMLImageElement;
     if (img2) {
       const convertImage2 = () => {
+        convertImageToAscii('img2', 'pre2', undefined, undefined, 150, 150);
+        // 아스키 변환 후 스크롤 애니메이션 초기화
         nextTick(() => {
           asciiScrollImg(asciiWrapper2.value, 'pre2', 'img2');
         });
@@ -101,7 +103,7 @@ const goLinkVisual = () => {
 
 <style scope>
 .ascii-wrap.scroll{
-  padding:3000px 0;
+  padding:2000px 0;
 }
 
 </style>
