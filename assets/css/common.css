@@ -1,5 +1,10 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
-/* Noto Sans KR은 @nuxtjs/google-fonts 모듈이 자동으로 처리 */
+/* Noto Sans KR, Azeret Mono은 @nuxtjs/google-fonts 모듈이 자동으로 처리 */
+
+:root {
+  --font-sans: 'Pretendard', 'Noto Sans KR', sans-serif;
+  --font-mono: 'Azeret Mono', 'Courier New', monospace;
+}
 
 *{ box-sizing:border-box; }
 html { overflow-y:scroll; margin:0; padding:0; border:0; -webkit-text-size-adjust:none; }
@@ -37,7 +42,7 @@ img{max-width:100%; width:auto; margin:0 auto; vertical-align:middle; }
   line-height: 1;
   margin: 0;
   padding: 0;
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   white-space: pre;
   overflow: auto;
 }

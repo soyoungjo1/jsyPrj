@@ -59,7 +59,8 @@ export default defineNuxtConfig({
     families: {
       'Noto Sans KR': {
         wght: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-      }
+      },
+      'Azeret Mono': true,
     },
     display: 'swap',    // 폰트 로딩 최적화
     preload: true,      // 폰트 프리로드
