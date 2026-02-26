@@ -59,33 +59,47 @@
       </div>
     </div>
 
-    <!-- 다음 영역: 스크롤로 여기까지 오면 일반 콘텐츠 -->
-    <div class="portfolio-inner">
-      <p class="portfolio-label">Portfolio</p>
-      <h2 class="portfolio-headline">Selected work</h2>
-      <p class="portfolio-desc">
-        프로젝트와 디자인 작업을 선별해 담았습니다.
-      </p>
-      <ul class="work-list">
-        <li v-for="(item, i) in items" :key="i" class="work-item">
-          <NuxtLink :to="item.to" class="work-link">
-            <span class="work-index">{{ String(i + 1).padStart(2, '0') }}</span>
-            <span class="work-title">{{ item.title }}</span>
-            <span class="work-meta">{{ item.meta }}</span>
-          </NuxtLink>
-        </li>
-      </ul>
-    </div>
+    <!-- 다음 영역: 스크롤로 여기까지 오면 슬라이드(이미지 → 호버 시 아스키 아트) -->
+    <PortfolioSlider :items="portfolioItems" />
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const items = [
-  { title: 'Project A', meta: 'Web · 2024', to: '/works' },
-  { title: 'Project B', meta: 'Visual · 2024', to: '/works' },
-  { title: 'Project C', meta: 'Branding · 2023', to: '/works' },
+const portfolioItems = [
+  {
+    title: 'Project A',
+    meta: 'Web · 2024',
+    to: '/works',
+    bg: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+    visualOnly: true,
+  },
+  {
+    title: 'KITOKITO',
+    meta: '2019/02/23 (SAT) - 03/24 (SUN)',
+    metaExtra: 'MONDAY CLOSE · 10:00 - 18:00 AT NOTJUSTLIBRARY',
+    to: '/works',
+    bg: 'linear-gradient(145deg, #2d132c 0%, #1a1a2e 60%, #16213e 100%)',
+  },
+  {
+    title: 'Project C',
+    meta: 'Branding · 2023',
+    to: '/works',
+    bg: 'linear-gradient(160deg, #0f3460 0%, #1a1a2e 100%)',
+  },
+  {
+    title: 'Project D',
+    meta: 'Visual · 2024',
+    to: '/works',
+    bg: 'linear-gradient(135deg, #16213e 0%, #2d132c 100%)',
+  },
+  {
+    title: 'Project E',
+    meta: 'Web · 2023',
+    to: '/works',
+    bg: 'linear-gradient(145deg, #0f3460 0%, #1a1a2e 100%)',
+  },
 ]
 
 const recentProjects = [
@@ -213,78 +227,6 @@ onUnmounted(() => {
   background: #0a0a0a;
   color: #fafafa;
 }
-.portfolio-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: clamp(48px, 10vw, 120px) clamp(24px, 6vw, 80px);
-}
-.portfolio-label {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #888;
-  margin-bottom: 12px;
-}
-.portfolio-headline {
-  font-family: var(--font-sans);
-  font-size: clamp(28px, 5vw, 42px);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  margin: 0 0 16px 0;
-}
-.portfolio-desc {
-  font-size: clamp(14px, 2vw, 16px);
-  color: #aaa;
-  line-height: 1.6;
-  margin-bottom: 48px;
-}
-.work-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.work-item {
-  border-top: 1px solid #222;
-}
-.work-link {
-  display: grid;
-  grid-template-columns: 48px 1fr auto;
-  align-items: center;
-  gap: 24px;
-  padding: 20px 0;
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.2s ease, background 0.2s ease;
-}
-.work-link:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.03);
-}
-.work-index {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: #666;
-}
-.work-title {
-  font-size: clamp(16px, 2.5vw, 20px);
-  font-weight: 500;
-}
-.work-meta {
-  font-size: 13px;
-  color: #666;
-}
-@media (max-width: 640px) {
-  .work-link {
-    grid-template-columns: 40px 1fr;
-    gap: 12px;
-  }
-  .work-meta {
-    grid-column: 2;
-    font-size: 12px;
-  }
-}
-
 /* Recent Project 스크롤 구간: 높이는 JS에서 scrollStageHeightPx 로 계산 (기본 4×뷰포트) */
 .recent-scroll-stage {
   min-height: 100vh;

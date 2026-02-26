@@ -2,7 +2,6 @@
   <!--메인-->
   <div class="main_wrap">
     <AsciiArt />
-    
     <Cont/>
   </div>
 </template>
