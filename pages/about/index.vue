@@ -1,8 +1,7 @@
 <template>
-    <p>ddddddddddddddddddddddddd나야</p>
+  <AboutView />
 </template>
 
 <script setup lang="ts">
-
-
+import AboutView from '~/views/about/index.vue'
 </script>

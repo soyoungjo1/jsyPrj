@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <p>웹</p>
-    </div>
+  <WebWorksList />
 </template>
 
 <script setup lang="ts">
-
+import WebWorksList from '~/views/webDetail.vue'
 </script>

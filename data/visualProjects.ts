@@ -1,0 +1,136 @@
+export interface VisualProject {
+  id: string
+  title: string
+  titleEn: string
+  client: string
+  year: string
+  type: string
+  tags: string[]
+  description: string
+  thumb: string
+  images?: string[]
+}
+
+export const visualProjects: VisualProject[] = [
+  {
+    id: 'recurit',
+    title: '채용공고 상세페이지',
+    titleEn: 'Recruit Detail Page',
+    client: '아이스크림미디어',
+    year: '2021',
+    type: '상세페이지',
+    tags: ['Photoshop', 'Illustrator'],
+    description: '아이스크림미디어 채용공고 상세페이지 디자인. 직군별 특성을 살린 레이아웃으로 지원자에게 브랜드 이미지를 효과적으로 전달.',
+    thumb: '/portfolio/visual_list1_recurit.jpg',
+  },
+  {
+    id: 'iscream_detail',
+    title: '상품 상세페이지',
+    titleEn: 'Product Detail Page',
+    client: '아이스크림몰',
+    year: '2021–22',
+    type: '상세페이지',
+    tags: ['Photoshop', 'Illustrator'],
+    description: '교육상품의 느낌에 맞춰 상품만의 특징을 부각시킨 상세페이지 디자인. 각 상품의 포지션에 맞는 비주얼 스타일 적용.',
+    thumb: '/portfolio/visual_list2_iscream_detail.jpg',
+  },
+  {
+    id: 'iscream_experience',
+    title: '체험단 페이지',
+    titleEn: 'Experience Campaign',
+    client: '아이스크림몰',
+    year: '2021–22',
+    type: '기획전',
+    tags: ['Photoshop', 'Illustrator'],
+    description: '아이스크림몰 체험단 모집 기획전 페이지. 참여 동기를 높이는 비주얼과 정보 구성.',
+    thumb: '/portfolio/visual_list3_iscream_experience.jpg',
+  },
+  {
+    id: 'iscream_planning',
+    title: '기획전',
+    titleEn: 'Planning Campaign',
+    client: '아이스크림몰',
+    year: '2021–22',
+    type: '기획전',
+    tags: ['Photoshop', 'Illustrator'],
+    description: '아이스크림몰 기획전 시리즈. 시즌·테마별 기획전 페이지 디자인으로 클릭률 향상.',
+    thumb: '/portfolio/visual_list4_iscream_planning.jpg',
+  },
+  {
+    id: 'histore',
+    title: '기획전 + 상세페이지',
+    titleEn: 'Hi-Store Campaign',
+    client: '쌤마켓 · 하이스토어',
+    year: '2022',
+    type: '기획전 + 상세페이지',
+    tags: ['Photoshop', 'Illustrator'],
+    description: '쌤마켓과 하이스토어의 기획전 및 할인 상세페이지. 각 상품의 특성과 분위기에 맞는 디자인으로 전환율 기여.',
+    thumb: '/portfolio/visual_list5_histore.jpg',
+  },
+  {
+    id: 'iscream_popup',
+    title: '팝업 디자인',
+    titleEn: 'Popup Design',
+    client: '아이스크림몰',
+    year: '2021–23',
+    type: '배너 · 팝업',
+    tags: ['Photoshop', 'Illustrator', 'After Effects'],
+    description: '아이스크림몰 이벤트·공지 팝업 디자인. 시즌별 컨셉에 맞는 비주얼 제작. GIF 애니메이션 포함.',
+    thumb: '/portfolio/visual_list6_iscream_popup.jpg',
+  },
+  {
+    id: 'iscream_logo',
+    title: '브랜드 로고 GIF',
+    titleEn: 'Brand Logo GIF',
+    client: '아이스크림',
+    year: '2021–23',
+    type: '로고 · GIF 애니메이션',
+    tags: ['Illustrator', 'After Effects'],
+    description: '아이스크림 관련 브랜드 로고 GIF 제작. 브랜드 아이덴티티를 살린 모션 디자인으로 배너·팝업 활용.',
+    thumb: '/portfolio/visual_list7_iscream_logo.jpg',
+  },
+  {
+    id: 'truck',
+    title: '푸드트럭 로고 + 메뉴 배너',
+    titleEn: 'Food Truck Brand',
+    client: 'Food Truck',
+    year: '2020',
+    type: '로고 · 배너',
+    tags: ['Illustrator', 'Photoshop'],
+    description: '푸드트럭 브랜드 로고 디자인 및 메뉴 배너 제작. 거리에서의 가시성을 고려한 강렬한 컬러와 레이아웃.',
+    thumb: '/portfolio/visual_list8_truck.jpg',
+  },
+  {
+    id: 'namecard',
+    title: '로고 + 명함 디자인',
+    titleEn: 'Logo + Business Card',
+    client: '태성티에스(주) · 쌀마니',
+    year: '2019',
+    type: '로고 · 명함',
+    tags: ['Illustrator', 'Photoshop'],
+    description: '기업 로고 및 명함 디자인. 브랜드 아이덴티티를 반영한 로고 시스템 구축과 인쇄물 적용.',
+    thumb: '/portfolio/visual_list9_namecard.jpg',
+  },
+  {
+    id: 'detail_page',
+    title: '상품 상세페이지',
+    titleEn: 'Product Detail',
+    client: '일반 상품',
+    year: '2022',
+    type: '상세페이지',
+    tags: ['Photoshop', 'Illustrator'],
+    description: '일반 상품 상세페이지 디자인. 상품의 특성과 타겟 고객층을 분석해 최적화된 레이아웃 제안.',
+    thumb: '/portfolio/visual_list10_detailpage.jpg',
+  },
+  {
+    id: 'forme',
+    title: '포미주스 브랜드 디자인',
+    titleEn: 'Forme Juice Brand',
+    client: '포미주스',
+    year: '2022',
+    type: '브랜드 디자인',
+    tags: ['Illustrator', 'Photoshop'],
+    description: '포미주스 브랜드 아이덴티티 디자인. 건강하고 프리미엄한 이미지를 살린 종합 브랜딩.',
+    thumb: '/portfolio/visual_list11_formejuice.jpg',
+  },
+]

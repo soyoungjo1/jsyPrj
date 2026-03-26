@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <p>비주얼</p>
-    </div>
+  <VisualWorksList />
 </template>
 
 <script setup lang="ts">
-
+import VisualWorksList from '~/views/visualDetail.vue'
 </script>

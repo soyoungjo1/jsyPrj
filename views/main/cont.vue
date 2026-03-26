@@ -43,7 +43,7 @@
                     <span v-for="n in 12" :key="n" class="bar" :style="{ height: 10 + (n % 3) * 3 + 'px' }" />
                     <span class="barcode-num">{{ barcodeForFace(i) }}</span>
                   </div>
-                  <div class="panel-image" :style="{ backgroundImage: project.bg }">
+                  <div class="panel-image" :style="{ background: project.bg }">
                     <div class="panel-overlay" />
                   </div>
                   <div class="panel-copy panel-copy-outline">
@@ -62,70 +62,129 @@
     <!-- 다음 영역: 스크롤로 여기까지 오면 슬라이드(이미지 → 호버 시 아스키 아트) -->
     <PortfolioSlider :items="portfolioItems" />
   </section>
+
+  <!-- ── Section A: Marquee ticker ───────────────────── -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="ticker-item">FRONTEND DEVELOPER</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">WEB DEVELOPMENT</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">VISUAL DESIGN</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">6+ YEARS</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">SEOUL KR</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">JSY · 조소영</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">FRONTEND DEVELOPER</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">WEB DEVELOPMENT</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">VISUAL DESIGN</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">6+ YEARS</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">SEOUL KR</span>
+      <span class="ticker-sep">◈</span>
+      <span class="ticker-item">JSY · 조소영</span>
+      <span class="ticker-sep">◈</span>
+    </div>
+  </div>
+
+  <!-- ── Section B: About Teaser ─────────────────────── -->
+  <section class="about-teaser">
+    <div class="about-teaser-inner">
+      <!-- Left: display text -->
+      <div class="about-teaser-left">
+        <p class="about-display">디자인부터</p>
+        <p class="about-display">개발까지.</p>
+      </div>
+
+      <!-- Right: stats + CTA -->
+      <div class="about-teaser-right">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-value">6+</span>
+            <span class="stat-label">years</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">3</span>
+            <span class="stat-label">companies</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">2161</span>
+            <span class="stat-label">commits</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">17+</span>
+            <span class="stat-label">sites</span>
+          </div>
+        </div>
+        <a href="/about" class="about-cta">→ about.me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section C: Footer ────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="footer-name-en">JSY</span>
+          <span class="footer-name-kr">조소영 · Frontend Dev</span>
+        </div>
+        <nav class="footer-nav">
+          <a href="/works/web" class="footer-nav-link">works</a>
+          <span class="footer-nav-sep">·</span>
+          <a href="/about" class="footer-nav-link">about</a>
+          <span class="footer-nav-sep">·</span>
+          <a href="/docs" class="footer-nav-link">docs</a>
+        </nav>
+        <a href="mailto:soyoung.j.dev@gmail.com" class="footer-email">↗ email</a>
+      </div>
+      <div class="footer-meta">
+        <span class="footer-period">2018 → 2026 · Seoul KR</span>
+      </div>
+      <div class="footer-rule" />
+      <p class="footer-copy">©2026 JSY. Built with Nuxt 3.</p>
+    </div>
+  </footer>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const portfolioItems = [
-  {
-    title: 'Project A',
-    meta: 'Web · 2024',
-    to: '/works',
-    bg: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-    visualOnly: true,
-  },
-  {
-    title: 'KITOKITO',
-    meta: '2019/02/23 (SAT) - 03/24 (SUN)',
-    metaExtra: 'MONDAY CLOSE · 10:00 - 18:00 AT NOTJUSTLIBRARY',
-    to: '/works',
-    bg: 'linear-gradient(145deg, #2d132c 0%, #1a1a2e 60%, #16213e 100%)',
-  },
-  {
-    title: 'Project C',
-    meta: 'Branding · 2023',
-    to: '/works',
-    bg: 'linear-gradient(160deg, #0f3460 0%, #1a1a2e 100%)',
-  },
-  {
-    title: 'Project D',
-    meta: 'Visual · 2024',
-    to: '/works',
-    bg: 'linear-gradient(135deg, #16213e 0%, #2d132c 100%)',
-  },
-  {
-    title: 'Project E',
-    meta: 'Web · 2023',
-    to: '/works',
-    bg: 'linear-gradient(145deg, #0f3460 0%, #1a1a2e 100%)',
-  },
+  { title: '드시모네몰', meta: 'Commerce · Vue / Nuxt · 2023–', to: '/works/web', image: '/portfolio/web_list3_lichtzen.jpg' },
+  { title: 'Agency Sites', meta: 'Web Design · HTML/CSS · 2018–21', to: '/works/web', image: '/portfolio/web_list1_icall.jpg' },
+  { title: 'Visual Design', meta: 'Graphic · Photoshop · 2021–23', to: '/works/visual', image: '/portfolio/visual_list5_histore.jpg' },
+  { title: 'Brand Identity', meta: 'Logo · After Effects · 2021–23', to: '/works/visual', image: '/portfolio/visual_list7_iscream_logo.jpg' },
+  { title: 'Campaign', meta: 'Planning · Illustrator · 2022', to: '/works/visual', image: '/portfolio/visual_list4_iscream_planning.jpg' },
 ]
 
-const recentProjects = [
-  {
-    title: 'Project A — OOH Campaign',
-    desc: '2025년 주요 상업지에 OOH 광고를 설치해 진행한 캠페인입니다. 대형 아웃도어와 키오스크를 활용했습니다.',
-    bg: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-  },
-  {
-    title: 'Project B — OOH Campaign',
-    desc: '도심 상업지에서 진행한 "저렴하게 사서 빠르게 받는다" 캠페인. OOH 설치를 통해 브랜드 인지도를 높였습니다.',
-    bg: 'linear-gradient(145deg, #2d132c 0%, #1a1a2e 60%, #16213e 100%)',
-  },
-]
 // 4면 상자용 (네 면)
 const fourFaces = [
-  ...recentProjects,
   {
-    title: 'Project C — OOH Campaign',
-    desc: '시즌 캠페인으로 대형 광고물과 디지털 스크린을 연동해 브랜드 일관성을 강화했습니다.',
-    bg: 'linear-gradient(160deg, #0f3460 0%, #1a1a2e 100%)',
+    title: '드시모네몰 — Commerce',
+    desc: 'PHP → Vue.js → Nuxt.js SSR 전환. 정기구독·결제·VIP 라운지 전 영역 구축. 2,161 commits.',
+    bg: 'url(/portfolio/web_list3_lichtzen.jpg) center/cover',
   },
   {
-    title: 'Project D — OOH Campaign',
-    desc: '팝업과 아웃도어를 결합한 통합 캠페인. 오프라인 터치포인트를 확대했습니다.',
-    bg: 'linear-gradient(135deg, #16213e 0%, #2d132c 100%)',
+    title: '또박케어 — App WebView',
+    desc: '건강관리 앱 웹뷰 화면 개발. 산소지수 시각화, 포인트 교환소, 머니퀴즈 등.',
+    bg: 'url(/portfolio/web_list4_jeongwha.jpg) center/cover',
+  },
+  {
+    title: 'Agency Sites — 17 Works',
+    desc: '반응형 홈페이지 17개 기획부터 납품까지 1인 풀사이클. 제조·의료·건축·에너지 등 다양한 업종.',
+    bg: 'url(/portfolio/web_list5_younginace.jpg) center/cover',
+  },
+  {
+    title: 'Visual Design',
+    desc: '상세페이지·기획전·로고·브랜드 아이덴티티 디자인. Photoshop · Illustrator · After Effects.',
+    bg: 'url(/portfolio/visual_list5_histore.jpg) center/cover',
   },
 ]
 
@@ -193,9 +252,8 @@ function onScroll () {
   const rect = el.getBoundingClientRect()
   const stageHeight = el.offsetHeight
   const start = rect.top
-  const end = start + stageHeight
   const vh = window.innerHeight
-  if (end < 0 || start > vh) return
+  if (start + stageHeight < 0 || start > vh) return
   const scrolled = -start
   const p = clamp(scrolled / stageHeight, 0, 1)
   updateFromProgress(p)
@@ -322,7 +380,7 @@ onUnmounted(() => {
   border-radius: 3px;
 }
 
-/* 바코드: 면 우상단 (이미지 참고) */
+/* 바코드: 면 우상단 */
 .panel-barcode.panel-barcode-tr {
   position: absolute;
   top: 0;
@@ -365,7 +423,7 @@ onUnmounted(() => {
   inset: 0;
   background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 50%);
 }
-/* 텍스트: 하단 왼쪽 흰색 테두리 박스 (이미지 참고) */
+/* 텍스트: 하단 왼쪽 흰색 테두리 박스 */
 .panel-copy.panel-copy-outline {
   padding: 12px 14px 16px;
   background: transparent;
@@ -408,5 +466,244 @@ onUnmounted(() => {
     margin-left: calc(-0.5 * min(85vw, 320px));
     margin-top: -150px;
   }
+}
+
+/* ── Section A: Ticker ──────────────────────────── */
+.ticker-wrap {
+  background: #111111;
+  border-top: 1px solid #222222;
+  border-bottom: 1px solid #222222;
+  height: 48px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  animation: ticker 18s linear infinite;
+  will-change: transform;
+}
+
+.ticker-item {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #f5f5f4;
+  letter-spacing: 0.15em;
+  padding: 0 16px;
+}
+
+.ticker-sep {
+  font-size: 10px;
+  color: #444444;
+  flex-shrink: 0;
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Section B: About Teaser ────────────────────── */
+.about-teaser {
+  background: #f5f5f4;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.about-teaser-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.about-teaser-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.about-display {
+  font-family: var(--font-sans);
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.0;
+  color: #111111;
+  margin: 0;
+}
+
+.about-teaser-right {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 32px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #888888;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.about-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #111111;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #111111;
+  padding-bottom: 2px;
+  text-decoration: none;
+  align-self: flex-start;
+  transition: opacity 0.15s;
+}
+
+.about-cta:hover {
+  opacity: 0.5;
+}
+
+@media (max-width: 720px) {
+  .about-teaser-inner {
+    grid-template-columns: 1fr;
+    padding: 56px 24px;
+    gap: 40px;
+  }
+}
+
+/* ── Section C: Footer ──────────────────────────── */
+.site-footer {
+  background: #111111;
+  color: #f5f5f4;
+}
+
+.footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-name-en {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: #f5f5f4;
+  letter-spacing: 0.1em;
+}
+
+.footer-name-kr {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #888888;
+  letter-spacing: 0.06em;
+}
+
+.footer-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-nav-link {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #888888;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: opacity 0.15s;
+}
+
+.footer-nav-link:hover {
+  opacity: 1;
+  color: #f5f5f4;
+}
+
+.footer-nav-sep {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #333333;
+}
+
+.footer-email {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #888888;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: color 0.15s;
+}
+
+.footer-email:hover {
+  color: #f5f5f4;
+}
+
+.footer-meta {
+  display: flex;
+  align-items: center;
+}
+
+.footer-period {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #444444;
+  letter-spacing: 0.06em;
+}
+
+.footer-rule {
+  height: 1px;
+  background: #222222;
+  margin: 8px 0 0;
+}
+
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #444444;
+  letter-spacing: 0.06em;
+  margin: 0;
 }
 </style>
