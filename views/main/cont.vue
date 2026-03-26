@@ -39,16 +39,34 @@
                 :style="faceStyle(i)"
               >
                 <div class="box-face-inner">
-                  <div class="panel-barcode panel-barcode-tr">
-                    <span v-for="n in 12" :key="n" class="bar" :style="{ height: 10 + (n % 3) * 3 + 'px' }" />
-                    <span class="barcode-num">{{ barcodeForFace(i) }}</span>
+                  <!-- 브라우저 목업 상단 바 -->
+                  <div class="panel-browser-bar">
+                    <span class="browser-dot dot-red" />
+                    <span class="browser-dot dot-yellow" />
+                    <span class="browser-dot dot-green" />
+                    <span class="browser-url">{{ project.url }}</span>
+                    <span class="panel-num">{{ String(i + 1).padStart(2, '0') }}</span>
                   </div>
-                  <div class="panel-image" :style="{ background: project.bg }">
-                    <div class="panel-overlay" />
+                  <!-- ASCII 로고 영역 -->
+                  <div class="panel-ascii-area">
+                    <template v-if="project.logo">
+                      <img
+                        :id="`logo-img-${i}`"
+                        :src="project.logo"
+                        :alt="project.title"
+                        class="logo-source"
+                        crossorigin="anonymous"
+                      />
+                      <pre :id="`logo-pre-${i}`" class="logo-ascii"></pre>
+                    </template>
+                    <template v-else>
+                      <pre class="logo-ascii logo-ascii-deco">{{ visualDesignAscii }}</pre>
+                    </template>
                   </div>
-                  <div class="panel-copy panel-copy-outline">
+                  <!-- 프로젝트 정보 -->
+                  <div class="panel-info">
+                    <span class="panel-date">{{ project.date }}</span>
                     <h3 class="panel-title">{{ project.title }}</h3>
-                    <span class="panel-meta">-25</span>
                     <p class="panel-desc">{{ project.desc }}</p>
                   </div>
                 </div>
@@ -154,7 +172,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { useAsciiArt } from '~/composables/useAsciiArt'
 
 const portfolioItems = [
   { title: '드시모네몰', meta: 'Commerce · Vue / Nuxt · 2023–', to: '/works/web', image: '/portfolio/web_list3_lichtzen.jpg' },
@@ -164,27 +183,50 @@ const portfolioItems = [
   { title: 'Campaign', meta: 'Planning · Illustrator · 2022', to: '/works/visual', image: '/portfolio/visual_list4_iscream_planning.jpg' },
 ]
 
+const { convertImageToAscii } = useAsciiArt()
+
+const visualDesignAscii = `
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░                             ░
+░   V  I  S  U  A  L          ░
+░                             ░
+░   D  E  S  I  G  N          ░
+░                             ░
+░   Photoshop · Illustrator   ░
+░   After Effects             ░
+░                             ░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+`.trim()
+
 // 4면 상자용 (네 면)
 const fourFaces = [
   {
-    title: '드시모네몰 — Commerce',
+    title: '헥토헬스케어',
+    date: '2023.09 ~',
     desc: 'PHP → Vue.js → Nuxt.js SSR 전환. 정기구독·결제·VIP 라운지 전 영역 구축. 2,161 commits.',
-    bg: 'url(/portfolio/web_list3_lichtzen.jpg) center/cover',
+    logo: '/main/hecto_logo.png',
+    url: 'hecto-healthcare.com',
   },
   {
-    title: '또박케어 — App WebView',
-    desc: '건강관리 앱 웹뷰 화면 개발. 산소지수 시각화, 포인트 교환소, 머니퀴즈 등.',
-    bg: 'url(/portfolio/web_list4_jeongwha.jpg) center/cover',
+    title: '아이스크림몰',
+    date: '2021.03 ~ 2023.08',
+    desc: '이커머스 전 영역 개발. 상세페이지·기획전·이벤트 페이지 등 다수 구축.',
+    logo: '/main/iscream_logo.png',
+    url: 'iscreammall.com',
   },
   {
-    title: 'Agency Sites — 17 Works',
-    desc: '반응형 홈페이지 17개 기획부터 납품까지 1인 풀사이클. 제조·의료·건축·에너지 등 다양한 업종.',
-    bg: 'url(/portfolio/web_list5_younginace.jpg) center/cover',
+    title: '올하우',
+    date: '2020.05 ~ 2021.02',
+    desc: '인테리어 플랫폼 반응형 웹 전체 구축 및 앱 웹뷰 대응.',
+    logo: '/main/allhow_logo.png',
+    url: 'allhow.co.kr',
   },
   {
     title: 'Visual Design',
+    date: '2021 ~ 2023',
     desc: '상세페이지·기획전·로고·브랜드 아이덴티티 디자인. Photoshop · Illustrator · After Effects.',
-    bg: 'url(/portfolio/visual_list5_histore.jpg) center/cover',
+    logo: null,
+    url: 'works / visual',
   },
 ]
 
@@ -235,15 +277,12 @@ function updateFromProgress (p: number) {
 }
 
 const boxAngleDeg = ref(0)
-const boxFaceRadius = ref(175)
+const boxFaceRadius = ref(180)
 
 function faceStyle (i: number) {
   return {
     transform: `rotateY(${-i * 90}deg) translateZ(${boxFaceRadius.value}px)`,
   }
-}
-function barcodeForFace (i: number) {
-  return `2025Y${String(i + 1).padStart(3, '0')}25`
 }
 
 function onScroll () {
@@ -263,14 +302,29 @@ function onResize () {
   if (typeof window === 'undefined') return
   viewportWidth = window.innerWidth
   scrollStageHeightPx.value = window.innerHeight * SCROLL_STAGE_MULTIPLIER
-  boxFaceRadius.value = viewportWidth <= 720 ? Math.min(160, viewportWidth * 0.42) : 175
+  boxFaceRadius.value = viewportWidth <= 720 ? Math.min(160, viewportWidth * 0.42) : 180
 }
 
 onMounted(() => {
-  onResize()   // scrollStageHeightPx 등 계산
+  onResize()
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('resize', onResize)
+
+  // 로고 → ASCII 변환
+  nextTick(() => {
+    fourFaces.forEach((face, i) => {
+      if (!face.logo) return
+      const img = document.getElementById(`logo-img-${i}`) as HTMLImageElement
+      if (!img) return
+      const doConvert = () => convertImageToAscii(`logo-img-${i}`, `logo-pre-${i}`, undefined, undefined, 62, 120)
+      if (img.complete && img.naturalWidth > 0) {
+        doConvert()
+      } else {
+        img.addEventListener('load', doConvert)
+      }
+    })
+  })
 })
 
 onUnmounted(() => {
@@ -346,7 +400,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 360px;
+  min-height: 480px;
 }
 .box-3d-rotating {
   position: relative;
@@ -355,14 +409,16 @@ onUnmounted(() => {
   transform-style: preserve-3d;
   will-change: transform;
 }
+
+/* ── 큐브 면 ── */
 .box-face {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 350px;
-  height: 320px;
-  margin-left: -175px;
-  margin-top: -160px;
+  width: 360px;
+  height: 460px;
+  margin-left: -180px;
+  margin-top: -230px;
   transform-style: preserve-3d;
   backface-visibility: hidden;
   pointer-events: none;
@@ -370,91 +426,118 @@ onUnmounted(() => {
 .box-face-inner {
   width: 100%;
   height: 100%;
-  background: #0f0f0f;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  position: relative;
+  background: #fff;
+  border-radius: 6px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
-  border-radius: 3px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.55);
 }
 
-/* 바코드: 면 우상단 */
-.panel-barcode.panel-barcode-tr {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 2;
-  height: auto;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-  padding: 8px 10px;
-  background: rgba(0, 0, 0, 0.5);
-  border-bottom: none;
-  border-left: 1px solid rgba(255,255,255,0.15);
-  border-bottom-left-radius: 4px;
+/* ── 브라우저 목업 상단 바 ── */
+.panel-browser-bar {
+  flex-shrink: 0;
+  height: 34px;
+  background: #1c1c1e;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
 }
-.panel-barcode-tr .bar {
-  display: block;
+.browser-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
-.panel-barcode-tr .barcode-num {
-  margin-left: 0;
-  margin-top: 4px;
-  font-size: 10px;
-  color: rgba(255,255,255,0.8);
-}
-.panel-barcode .bar {
-  width: 3px;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 1px;
-}
-.panel-image {
-  height: 180px;
-  background-size: cover;
-  background-position: center;
-  position: relative;
+.dot-red    { background: #ff5f57; }
+.dot-yellow { background: #febc2e; }
+.dot-green  { background: #28c840; }
+.browser-url {
   flex: 1;
-  min-height: 120px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #666;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.panel-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 50%);
+.panel-num {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #444;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
 }
-/* 텍스트: 하단 왼쪽 흰색 테두리 박스 */
-.panel-copy.panel-copy-outline {
-  padding: 12px 14px 16px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 2px;
-  margin: 10px;
-  margin-top: auto;
-  max-width: calc(100% - 20px);
+
+/* ── ASCII 로고 영역 ── */
+.panel-ascii-area {
+  flex: 1;
+  min-height: 0;
+  background: #0d0d0d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 24px 18px;
+  position: relative;
 }
-.panel-title {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  margin: 0 0 4px 0;
-  color: #fff;
+
+.logo-source {
+  display: none;
 }
-.panel-meta {
+
+.logo-ascii {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: pre;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.logo-ascii-deco {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.06em;
+}
+
+/* ── 하단 프로젝트 정보 ── */
+.panel-info {
+  flex-shrink: 0;
+  padding: 16px 18px 18px;
+  background: #fff;
+  border-top: 1px solid #ebebeb;
+}
+.panel-date {
+  display: block;
   font-family: var(--font-mono);
   font-size: 10px;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 6px;
-  display: block;
+  color: #aaa;
+  letter-spacing: 0.08em;
+  margin-bottom: 5px;
+}
+.panel-title {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: -0.02em;
+  margin: 0 0 7px 0;
 }
 .panel-desc {
   font-size: 11px;
-  line-height: 1.45;
-  color: rgba(255,255,255,0.85);
+  line-height: 1.6;
+  color: #777;
   margin: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -462,9 +545,9 @@ onUnmounted(() => {
   .box-face {
     width: 85vw;
     max-width: 320px;
-    height: 300px;
+    height: 400px;
     margin-left: calc(-0.5 * min(85vw, 320px));
-    margin-top: -150px;
+    margin-top: -200px;
   }
 }
 

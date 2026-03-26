@@ -69,6 +69,10 @@ export const useAsciiArt = () => {
     canvas.width = width;
     canvas.height = actualHeight;
 
+    // 투명 PNG 대비: 흰 배경을 먼저 채워 투명 픽셀이 검정으로 처리되지 않도록 함
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     ctx.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const pixelData = getPixelData(imageData);
