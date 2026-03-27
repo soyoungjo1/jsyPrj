@@ -7,16 +7,19 @@
       :style="{ height: scrollStageHeightPx + 'px' }"
     >
       <div class="recent-sticky-viewport">
+        <!-- 상단 좌측 타이틀 (asciiArt.vue .title.top-left 와 유사) -->
+        <h1 class="section-title-top-left">Recent.Project</h1>
+
         <!-- 1. 라벨: 처음엔 붙어 있다가 스크롤 시 양옆으로 이동 -->
         <div class="recent-labels-wrap">
           <span
             class="recent-label recent-label-left"
             :style="{ transform: `translate(calc(-50% + ${labelLeftX}px), -50%)` }"
-          >Recent Project</span>
+          >Featured Work</span>
           <span
             class="recent-label recent-label-right"
             :style="{ transform: `translate(calc(-50% + ${labelRightX}px), -50%)` }"
-          >4P—Creative—Campaign</span>
+          >Commerce · Vue · Nuxt</span>
         </div>
         <!-- 2. 라벨이 끝에 도달한 뒤 가운데 이미지(4면 스트립) 표시 -->
         <div
@@ -59,9 +62,6 @@
                       />
                       <pre :id="`logo-pre-${i}`" class="logo-ascii"></pre>
                     </template>
-                    <template v-else>
-                      <pre class="logo-ascii logo-ascii-deco">{{ visualDesignAscii }}</pre>
-                    </template>
                   </div>
                   <!-- 프로젝트 정보 -->
                   <div class="panel-info">
@@ -80,100 +80,21 @@
     <!-- 다음 영역: 스크롤로 여기까지 오면 슬라이드(이미지 → 호버 시 아스키 아트) -->
     <PortfolioSlider :items="portfolioItems" />
   </section>
-
-  <!-- ── Section A: Marquee ticker ───────────────────── -->
-  <div class="ticker-wrap">
-    <div class="ticker-track">
-      <span class="ticker-item">FRONTEND DEVELOPER</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">WEB DEVELOPMENT</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">VISUAL DESIGN</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">6+ YEARS</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">SEOUL KR</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">JSY · 조소영</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">FRONTEND DEVELOPER</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">WEB DEVELOPMENT</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">VISUAL DESIGN</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">6+ YEARS</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">SEOUL KR</span>
-      <span class="ticker-sep">◈</span>
-      <span class="ticker-item">JSY · 조소영</span>
-      <span class="ticker-sep">◈</span>
-    </div>
-  </div>
-
-  <!-- ── Section B: About Teaser ─────────────────────── -->
-  <section class="about-teaser">
-    <div class="about-teaser-inner">
-      <!-- Left: display text -->
-      <div class="about-teaser-left">
-        <p class="about-display">디자인부터</p>
-        <p class="about-display">개발까지.</p>
-      </div>
-
-      <!-- Right: stats + CTA -->
-      <div class="about-teaser-right">
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-value">6+</span>
-            <span class="stat-label">years</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">3</span>
-            <span class="stat-label">companies</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">2161</span>
-            <span class="stat-label">commits</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">17+</span>
-            <span class="stat-label">sites</span>
-          </div>
-        </div>
-        <a href="/about" class="about-cta">→ about.me</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Section C: Footer ────────────────────────────── -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <span class="footer-name-en">JSY</span>
-          <span class="footer-name-kr">조소영 · Frontend Dev</span>
-        </div>
-        <nav class="footer-nav">
-          <a href="/works/web" class="footer-nav-link">works</a>
-          <span class="footer-nav-sep">·</span>
-          <a href="/about" class="footer-nav-link">about</a>
-          <span class="footer-nav-sep">·</span>
-          <a href="/docs" class="footer-nav-link">docs</a>
-        </nav>
-        <a href="mailto:soyoung.j.dev@gmail.com" class="footer-email">↗ email</a>
-      </div>
-      <div class="footer-meta">
-        <span class="footer-period">2018 → 2026 · Seoul KR</span>
-      </div>
-      <div class="footer-rule" />
-      <p class="footer-copy">©2026 JSY. Built with Nuxt 3.</p>
-    </div>
-  </footer>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import type { AsciiFilterOptions } from '~/composables/useAsciiFilter'
 import { useAsciiArt } from '~/composables/useAsciiArt'
+
+/** 로고 ASCII 필터. `undefined`면 필터 없음(기존과 동일). 적용할 때만 객체 할당.
+ *  예: `import { ASCII_FILTER_PRESET_ONLINE } from '~/composables/useAsciiFilter'` 후
+ *      `logoAsciiFilters = { ...ASCII_FILTER_PRESET_ONLINE }` — 가로는 `LOGO_ASCII_MAX_W`를 87 등으로 조절
+ */
+const logoAsciiFilters: AsciiFilterOptions | undefined = undefined
+
+const LOGO_ASCII_MAX_W = 62
+const LOGO_ASCII_MAX_H = 120
 
 const portfolioItems = [
   { title: '드시모네몰', meta: 'Commerce · Vue / Nuxt · 2023–', to: '/works/web', image: '/portfolio/web_list3_lichtzen.jpg' },
@@ -184,19 +105,6 @@ const portfolioItems = [
 ]
 
 const { convertImageToAscii } = useAsciiArt()
-
-const visualDesignAscii = `
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░                             ░
-░   V  I  S  U  A  L          ░
-░                             ░
-░   D  E  S  I  G  N          ░
-░                             ░
-░   Photoshop · Illustrator   ░
-░   After Effects             ░
-░                             ░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-`.trim()
 
 // 4면 상자용 (네 면)
 const fourFaces = [
@@ -225,7 +133,7 @@ const fourFaces = [
     title: 'Visual Design',
     date: '2021 ~ 2023',
     desc: '상세페이지·기획전·로고·브랜드 아이덴티티 디자인. Photoshop · Illustrator · After Effects.',
-    logo: null,
+    logo: '/main/visual_logo.png',
     url: 'works / visual',
   },
 ]
@@ -317,7 +225,8 @@ onMounted(() => {
       if (!face.logo) return
       const img = document.getElementById(`logo-img-${i}`) as HTMLImageElement
       if (!img) return
-      const doConvert = () => convertImageToAscii(`logo-img-${i}`, `logo-pre-${i}`, undefined, undefined, 62, 120)
+      const doConvert = () =>
+        convertImageToAscii(`logo-img-${i}`, `logo-pre-${i}`, undefined, undefined, LOGO_ASCII_MAX_W, LOGO_ASCII_MAX_H, logoAsciiFilters)
       if (img.complete && img.naturalWidth > 0) {
         doConvert()
       } else {
@@ -357,6 +266,21 @@ onUnmounted(() => {
   overflow: hidden;
   background: #0a0a0a;
 }
+
+.section-title-top-left {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  z-index: 10;
+  margin: 0;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: clamp(18px, 2.8vw, 32px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #e8e8e6;
+}
+
 .recent-labels-wrap {
   position: absolute;
   top: 0;
@@ -427,7 +351,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   background: #fff;
-  border-radius: 6px;
+  border-radius: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -507,32 +431,49 @@ onUnmounted(() => {
   letter-spacing: 0.06em;
 }
 
-/* ── 하단 프로젝트 정보 ── */
+/* ── 하단 프로젝트 정보 (네 면 동일 높이) ── */
 .panel-info {
   flex-shrink: 0;
-  padding: 16px 18px 18px;
+  box-sizing: border-box;
+  height: 152px;
+  padding: 12px 18px 14px;
   background: #fff;
   border-top: 1px solid #ebebeb;
+  display: flex;
+  flex-direction: column;
 }
 .panel-date {
   display: block;
+  flex-shrink: 0;
   font-family: var(--font-mono);
   font-size: 10px;
   color: #aaa;
   letter-spacing: 0.08em;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
+  line-height: 1.2;
 }
 .panel-title {
+  flex-shrink: 0;
   font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 700;
   color: #111;
   letter-spacing: -0.02em;
-  margin: 0 0 7px 0;
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+  min-height: 2.6em;
+  max-height: 2.6em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .panel-desc {
+  flex-shrink: 0;
+  height: calc(11px * 1.55 * 2);
   font-size: 11px;
-  line-height: 1.6;
+  line-height: 1.55;
   color: #777;
   margin: 0;
   display: -webkit-box;
@@ -549,244 +490,5 @@ onUnmounted(() => {
     margin-left: calc(-0.5 * min(85vw, 320px));
     margin-top: -200px;
   }
-}
-
-/* ── Section A: Ticker ──────────────────────────── */
-.ticker-wrap {
-  background: #111111;
-  border-top: 1px solid #222222;
-  border-bottom: 1px solid #222222;
-  height: 48px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-}
-
-.ticker-track {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  white-space: nowrap;
-  animation: ticker 18s linear infinite;
-  will-change: transform;
-}
-
-.ticker-item {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: #f5f5f4;
-  letter-spacing: 0.15em;
-  padding: 0 16px;
-}
-
-.ticker-sep {
-  font-size: 10px;
-  color: #444444;
-  flex-shrink: 0;
-}
-
-@keyframes ticker {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* ── Section B: About Teaser ────────────────────── */
-.about-teaser {
-  background: #f5f5f4;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.about-teaser-inner {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 80px 24px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: center;
-}
-
-.about-teaser-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.about-display {
-  font-family: var(--font-sans);
-  font-size: clamp(48px, 7vw, 96px);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.0;
-  color: #111111;
-  margin: 0;
-}
-
-.about-teaser-right {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px 32px;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.stat-value {
-  font-family: var(--font-mono);
-  font-size: clamp(28px, 3.5vw, 48px);
-  font-weight: 700;
-  color: #111111;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.stat-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: #888888;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.about-cta {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: #111111;
-  letter-spacing: 0.06em;
-  border-bottom: 1px solid #111111;
-  padding-bottom: 2px;
-  text-decoration: none;
-  align-self: flex-start;
-  transition: opacity 0.15s;
-}
-
-.about-cta:hover {
-  opacity: 0.5;
-}
-
-@media (max-width: 720px) {
-  .about-teaser-inner {
-    grid-template-columns: 1fr;
-    padding: 56px 24px;
-    gap: 40px;
-  }
-}
-
-/* ── Section C: Footer ──────────────────────────── */
-.site-footer {
-  background: #111111;
-  color: #f5f5f4;
-}
-
-.footer-inner {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 48px 24px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.footer-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.footer-name-en {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 700;
-  color: #f5f5f4;
-  letter-spacing: 0.1em;
-}
-
-.footer-name-kr {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: #888888;
-  letter-spacing: 0.06em;
-}
-
-.footer-nav {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.footer-nav-link {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: #888888;
-  text-decoration: none;
-  letter-spacing: 0.06em;
-  transition: opacity 0.15s;
-}
-
-.footer-nav-link:hover {
-  opacity: 1;
-  color: #f5f5f4;
-}
-
-.footer-nav-sep {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: #333333;
-}
-
-.footer-email {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: #888888;
-  text-decoration: none;
-  letter-spacing: 0.06em;
-  transition: color 0.15s;
-}
-
-.footer-email:hover {
-  color: #f5f5f4;
-}
-
-.footer-meta {
-  display: flex;
-  align-items: center;
-}
-
-.footer-period {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: #444444;
-  letter-spacing: 0.06em;
-}
-
-.footer-rule {
-  height: 1px;
-  background: #222222;
-  margin: 8px 0 0;
-}
-
-.footer-copy {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: #444444;
-  letter-spacing: 0.06em;
-  margin: 0;
 }
 </style>
